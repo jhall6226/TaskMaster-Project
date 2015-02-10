@@ -6,16 +6,16 @@ from taskmaster_app.models import Project, Task
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = (
+        fields = [
             'title',
             'description',
             'resources',
-        )
+        ]
         
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = (
+        fields = [
             'title',
             'task_instructions',
             'project',
@@ -24,4 +24,4 @@ class TaskForm(forms.ModelForm):
             'complexity',
             'estimated_time',
             'deadline',
-        )
+        ]

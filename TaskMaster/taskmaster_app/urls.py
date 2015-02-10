@@ -9,9 +9,9 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^dashboard/', dashboard, name='dashboard'),
-    url(r'^projects/(?P<slug>[-\w]+)/$', project_view, name='project_view'),
-    url(r'^tasks/(?P<slug>[-\w]+)/$', task_view, name='task_view'),
+    url(r'^projects/(?P<project>[-\w]+)/$', project_view, name='project_view'),
+    url(r'^projects/(?P<project>[-\w]+)/tasks/(?P<task>[-\w]+)/$', task_view, name='task_view'),
     url(r'^addproject/', add_project, name='add_project'),
-    url(r'^addtask/', add_task, name='add_task'),
-    url(r'^resources/(?P<slug>[-\w]+)/$', resource_view, name='resource_view'),
+    url(r'^projects/(?P<project>[-\w]+)/addtask/', add_task, name='add_task'),
+    url(r'^resources/(?P<resource>[-\w]+)/$', resource_view, name='resource_view'),
 )

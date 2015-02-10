@@ -69,7 +69,7 @@ class Task(models.Model):
     resources = models.ManyToManyField('Resource', related_name='tasks')
     
     def __unicode__(self):
-        return (self.project.title + ': ' + self.title)
+        return (self.title)
     
     
 class Resource(models.Model):

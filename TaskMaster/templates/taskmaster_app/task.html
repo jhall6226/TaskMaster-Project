@@ -3,17 +3,21 @@
 {% block body %}
 
 <div class="jumbotron">
-    <h1 align="center">{{task}}</h1>
+    <h1 align="center">{{task.project.title}}: {{task.title}}</h1>
 </div>
 
 <div class="col-md-12">
+    <a href="{% url 'taskmaster_app:add_task' project=project.slug %}?id={{task.id}}" class="btn btn-sm btn-primary">Edit</a>
+
+<div class="col-md-12">
+    <h3 class="page-header">Resources</h3>
     {% if resources %}
         {% for resource in resources %}
-            <h3 class="page-header"><a href="{% url 'taskmaster_app:resource_view' slug=resource.slug %}?id={{resource.id}}">{{resource}}</a></h3>
+            <h4><a href="{% url 'taskmaster_app:resource_view' resource=resource.slug %}?id={{resource.id}}">{{resource}}</a></h4>
         {% endfor %}
     {% else %}
         <div class="alert alert-warning" align="center">
-            <h3>This Task doesn't have any Resources assigned to it yet.</h3>
+            <h4>This Task doesn't have any Resources assigned to it yet.</h4>
         </div>
     {% endif %}
 </div>

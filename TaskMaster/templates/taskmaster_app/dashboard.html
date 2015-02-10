@@ -9,11 +9,11 @@
 <div class="col-md-12">
     {% if projects %}
         {% for project in projects %}
-            <h3 class="page-header"><a href="{% url 'taskmaster_app:project_view' slug=project.slug %}?id={{project.id}}">{{project.title}}</a></h3>
+            <h3 class="page-header"><a href="{% url 'taskmaster_app:project_view' project=project.slug %}?id={{project.id}}">{{project.title}}</a></h3>
             {{project.description|linebreaks}}
                 {% for task in tasks %}
                     {% if task in project.tasks %}
-                        <a href="{% url 'taskmaster_app:task_view' slug=task.slug %}?id={{task.id}}">{{task}}</a>{% if not forloop.last %} | {% endif %}
+                        <a href="{% url 'taskmaster_app:task_view' project=project.slug task=task.slug %}?id={{task.id}}">{{task}}</a>{% if not forloop.last %} | {% endif %}
                     {% endif %}
                 {% endfor %}
         {% endfor %}
