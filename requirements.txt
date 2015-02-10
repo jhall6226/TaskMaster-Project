@@ -1,0 +1,3 @@
+# /TaskMaster-Project/requirements.txt
+Django==1.7.4
+Python==2.7.9

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="jumbotron">
+    <h1 align="center">{{resource.user.first_name}} {{resource.user.last_name}}</h1>
+</div>
+
+<div class="col-md-12">
+    {% if projects %}
+        {% for project in projects %}
+            <h3 class="page-header"><a href="{% url 'taskmaster_app:project_view' slug=project.slug %}?id={{project.id}}">{{project.title}}</a></h3>
+            {{project.description|linebreaks}}
+                {% for task in tasks %}
+                    {% if task in project.tasks %}
+                        <a href="{% url 'taskmaster_app:task_view' %}?id={{task.id}}">{{task}}</a>{% if not forloop.last %} | {% endif %}
+                    {% endif %}
+                {% endfor %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning" align="center">
+            <h3>This Resource is not assigned to any Projects yet.</h3>
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock body %}

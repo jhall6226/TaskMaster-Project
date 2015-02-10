@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="jumbotron">
+    <h1 align="center">{{task}}</h1>
+</div>
+
+<div class="col-md-12">
+    {% if resources %}
+        {% for resource in resources %}
+            <h3 class="page-header"><a href="{% url 'taskmaster_app:resource_view' slug=resource.slug %}?id={{resource.id}}">{{resource}}</a></h3>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning" align="center">
+            <h3>This Task doesn't have any Resources assigned to it yet.</h3>
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock body %}
