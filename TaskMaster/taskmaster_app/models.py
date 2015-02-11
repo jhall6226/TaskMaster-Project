@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 class Project(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200,unique=True)
     slug = models.SlugField(max_length=200,default='slug_placeholder')
     description = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
@@ -13,11 +13,13 @@ class Project(models.Model):
     
     resources = models.ManyToManyField('Resource', related_name='projects')
     
+    attachments = models.FileField(upload_to='projects/',blank=True)
+    
     def __unicode__(self):
         return self.title
         
 class Task(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200,unique=True)
     slug = models.SlugField(max_length=200,default='slug_placeholder')
     task_instructions = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)

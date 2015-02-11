@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                {% if user.is_authenticated %}<a class="navbar-brand" href="{% url 'taskmaster_app:dashboard' %}">Home</a>{% else %}<a class="navbar-brand" href="{% url 'home' %}">Home</a>{% endif %}
+                {% if user.is_authenticated %}<a class="navbar-brand" href="{% url 'taskmaster_app:dashboard' %}"><img class="img-responsive" style="margin: 0px auto; padding: 0px; float: center;" src="{% static 'TaskMaster/tm_logo.png' %}" alt="Home"></a>{% else %}<a class="navbar-brand" href="{% url 'home' %}"><img class="img-responsive" style="margin: 0px auto; padding: 0px; float: center;" src="{% static 'TaskMaster/tm_logo.png' %}" alt="Home"></a>{% endif %}
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">

@@ -7,9 +7,13 @@
 </div>
 
 <div class="col-md-12">
+    <a href="{% url 'taskmaster_app:add_project' %}?id={{project.id}}" class="btn btn-sm btn-primary">Edit</a>
+</div>
+
+<div class="col-md-12">
     {{project.description}}
     
-    <h3 class="page-header">Tasks<a href="{% url 'taskmaster_app:add_task' project=project.slug %}" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus"></span></a></h3>
+    <h3 class="page-header">Tasks <a href="{% url 'taskmaster_app:add_task' project=project.slug %}" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus"></span></a></h3>
     {% if tasks %}
         {% for task in tasks %}
             <h4 class="section-header"><a href="{% url 'taskmaster_app:task_view' project=project.slug task=task.slug %}?id={{task.id}}">{{task.title}}</a></h4>

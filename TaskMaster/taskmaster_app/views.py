@@ -27,6 +27,11 @@ def add_project(request):
         project = None
         
     if request.method == 'POST':
+        if request.POST.get('control') == 'cancel':
+            if id is None:
+                return HttpResponseRedirect(reverse('taskmaster_app:dashboard'))
+            else:
+                return HttpResponseRedirect(reverse('taskmaster_app:project_view', kwargs={'project':project.slug}))
         if request.POST.get('control') == 'delete':
             project.delete()
             messages.add_message(request, messages.INFO, 'Project deleted!')
@@ -34,10 +39,13 @@ def add_project(request):
             
         form = ProjectForm(request.POST)
         if form.is_valid():
-            p = form.save(commit=False)
+            p = form.save()
             p.slug = slugify(p.title)
             p.save()
-            messages.add_message(request, messages.INFO, 'Project added!')
+            if id is None:
+                messages.add_message(request, messages.INFO, 'Project added!')
+            else:
+                messages.add_message(request, messages.INFO, 'Project saved!')
             return HttpResponseRedirect(reverse('taskmaster_app:dashboard'))
     else:
         form = ProjectForm(instance=project)
@@ -72,7 +80,7 @@ def add_task(request, **kwargs):
                 messages.add_message(request, messages.INFO, 'Task added!')
             else:
                 messages.add_message(request, messages.INFO, 'Task saved!')
-            return HttpResponseRedirect(reverse('taskmaster_app:dashboard'))
+            return HttpResponseRedirect(reverse('taskmaster_app:project_view', kwargs={'project':project.slug}))
     else:
         form = TaskForm(instance=task)
     
