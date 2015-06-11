@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'taskmaster_app',
+    # 'django.contrib.sites',
+    # 'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,3 +95,7 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT='/var/www/taskmaster/media/'
+
+# User Registration Settings
+
+ACCOUNT_ACTIVATION_DAYS = 7

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<script type='text/javascript'>
+$('input[type="text"]'.addClass('form-control');
+$('textarea').addClass('form-control');
+</script>
+
+<div class="jumbotron">
+    <h1 align="center">User Registration</h1>
+</div>
+
+<div class="col-md-12">
+    <form action="" method="post">{% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block"/>
+    </form>
+</div>
+
+<div class="col-md-12" style="padding-top:15px;">
+    <form action="" method="post">{% csrf_token %}
+        <input type="hidden" name="control" value="cancel"/>
+        <input type="submit" value="Cancel" class="btn btn-lg btn-block btn-warning"/>
+    </form>
+</div>
+
+{% endblock body %}
