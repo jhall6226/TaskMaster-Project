@@ -3,6 +3,7 @@
 from django import forms
 from taskmaster_app.models import Project, Task
 
+
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project

@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'TaskMaster/add_edit_pages.css' %}"/>
+{% endblock stylesheets %}
+
 {% block body %}
 
 <script type='text/javascript'>
@@ -8,22 +13,31 @@ $('input[type="text"]'.addClass('form-control');
 $('textarea').addClass('form-control');
 </script>
 
-<div class="jumbotron">
-    <h1 align="center">Create New Project</h1>
-</div>
 
 {% if project %}
+<div class="jumbotron">
+    <h1 align="center">Edit Project</h1>
+</div>
+
 <div class="col-md-12">
     <form action="" method="post">{% csrf_token %}
-        {{form.as_p}}
+        <table>
+            {{form.as_table}}
+        </table>
         <input type="submit" value="Save" class="btn btn-primary btn-lg btn-block"/>
     </form>
 </div>
 {% else %}
+<div class="jumbotron">
+    <h1 align="center">Create New Project</h1>
+</div>
+
 <div class="col-md-12">
     <form action="" method="post">{% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Create New Task" class="btn btn-primary btn-lg btn-block"/>
+        <table>
+            {{form.as_table}}
+        </table>
+        <input type="submit" value="Create New Project" class="btn btn-primary btn-lg btn-block"/>
     </form>
 </div>
 {% endif %}
