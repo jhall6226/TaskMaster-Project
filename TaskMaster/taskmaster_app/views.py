@@ -125,8 +125,9 @@ def project_view(request, **kwargs):
     project = get_object_or_404(Project, slug=slug)
     tasks = project.tasks.all()
     resources = project.resources.all()
+    files = project.files.all()
     
-    return render(request, 'taskmaster_app/project.html', {'project':project,'tasks':tasks, 'resources':resources})
+    return render(request, 'taskmaster_app/project.html', {'project':project,'tasks':tasks, 'resources':resources, 'files':files})
 
 @login_required(login_url='/')
 def task_view(request, **kwargs):
