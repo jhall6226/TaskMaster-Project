@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-from taskmaster_app.models import Project, Task, Resource
+from taskmaster_app.models import Project, Task, Resource, ProjectFile
 from taskmaster_app.forms import ProjectForm, TaskForm
 
 
@@ -19,12 +19,23 @@ def dashboard(request):
     return render(request, 'taskmaster_app/dashboard.html',{'resource':resource,'projects':projects, 'tasks':tasks})
 
 @login_required(login_url='/')
-def add_project(request):
+def add_project(request, **kwargs):
+    
     id = request.GET.get('id', None)
     if id is not None:
         project = get_object_or_404(Project, id=id)
+        date_created = project.date_created
+        files = project.files.all()
     else:
         project = None
+        files=[]
+    # delete_file_id = request.GET.get('delete_file_id', None)
+    # if delete_file_id is not None:
+    #     ProjectFile.objects.get(id=delete_file_id).delete()
+    #     messages.add_message(request, messages.INFO, 'File deleted!')
+    #     form = ProjectForm(instance=project)
+    #     return render(request, 'taskmaster_app/addproject.html',{'form':form, 'project':project, 'files':files})
+
         
     if request.method == 'POST':
         if request.POST.get('control') == 'cancel':
@@ -33,24 +44,46 @@ def add_project(request):
             else:
                 return HttpResponseRedirect(reverse('taskmaster_app:project_view', kwargs={'project':project.slug}))
         if request.POST.get('control') == 'delete':
+            for f in ProjectFile.objects.filter(project=project):
+                f.delete()
             project.delete()
             messages.add_message(request, messages.INFO, 'Project deleted!')
             return HttpResponseRedirect(reverse('taskmaster_app:dashboard'))
-            
-        form = ProjectForm(request.POST)
+        for f in files:
+            if request.POST.get('control') == 'delete_file_' + str(f.id):
+                ProjectFile.objects.get(id=f.id).delete()
+                messages.add_message(request, messages.INFO, 'File deleted!')
+                project = get_object_or_404(Project, id=id)
+                files = project.files.all()
+                form = ProjectForm(instance=project)
+                return render(request, 'taskmaster_app/addproject.html',{'form':form, 'project':project, 'files':files})
+                    
+        form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
-            p = form.save()
-            p.slug = slugify(p.title)
-            p.save()
-            if id is None:
-                messages.add_message(request, messages.INFO, 'Project added!')
-            else:
+            project = form.save(commit=False)
+            project.slug = slugify(project.title)
+            if id:
+                project.date_created = date_created
+                project.id = id
                 messages.add_message(request, messages.INFO, 'Project saved!')
-            return HttpResponseRedirect(reverse('taskmaster_app:dashboard'))
+            else:
+                messages.add_message(request, messages.INFO, 'Project added!')
+            project.save()
+            form.save_m2m() 
+            for f in request.FILES.getlist('files'):
+                ProjectFile(f=f,project=project).save()
+            return HttpResponseRedirect(reverse('taskmaster_app:project_view', kwargs={'project':project.slug}))
+    
+    # elif request.method == 'DELETE':
+    #     ProjectFile.objects.get(id=request.DELETE.get('file_id')).delete()
+    #     messages.add_message(request, messages.INFO, 'File deleted!')
+    #     form = ProjectForm(instance=project)
+    #     return redirect('add_project',{'form':form, 'project':project, 'files':files})  
+        
     else:
         form = ProjectForm(instance=project)
     
-    return render(request, 'taskmaster_app/addproject.html',{'form':form, 'project':project})
+    return render(request, 'taskmaster_app/addproject.html',{'form':form, 'project':project, 'files':files})
 
 @login_required(login_url='/')
 def add_task(request, **kwargs):

@@ -3,22 +3,28 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 
+
+class ProjectFile(models.Model):
+    f = models.FileField(upload_to='project_files')
+    project = models.ForeignKey('Project', related_name='files', related_query_name='file')
+    
+class TaskFile(models.Model):
+    f = models.FileField(upload_to='project_files')
+    task = models.ForeignKey('Task', related_name='files', related_query_name='file')
+
 class Project(models.Model):
-    title = models.CharField(max_length=200,unique=True)
+    title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200,default='slug_placeholder')
     description = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, default=timezone.now())
-    
     resources = models.ManyToManyField('Resource', related_name='projects')
-    
-    attachments = models.FileField(upload_to='projects/',blank=True)
     
     def __unicode__(self):
         return self.title
         
 class Task(models.Model):
-    title = models.CharField(max_length=200,unique=True)
+    title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200,default='slug_placeholder')
     task_instructions = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
@@ -66,7 +72,6 @@ class Task(models.Model):
     # -----
     
     project = models.ForeignKey('Project', related_name='tasks')
-    
     resources = models.ManyToManyField('Resource', related_name='tasks')
     
     def __unicode__(self):
