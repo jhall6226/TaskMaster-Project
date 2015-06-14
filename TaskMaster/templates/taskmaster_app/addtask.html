@@ -8,12 +8,7 @@
 
 {% block body %}
 
-<script type='text/javascript'>
-$('input[type="text"]'.addClass('form-control');
-$('textarea').addClass('form-control');
-</script>
-
-{% if task in Tasks %}
+<!--{% if task in Tasks %}
 <div class="jumbotron">
     <h1 align="center">Edit Task</h1>
 </div>
@@ -55,7 +50,76 @@ $('textarea').addClass('form-control');
         <input type="submit" value="Delete" class="btn btn-lg btn-block btn-danger"/>
     </form>
 </div>
-{% endif %}
+{% endif %}-->
 
+<div class="jumbotron">
+    <h2 align="center">{% if task %}Edit Task{% else %}Create New Task{% endif %}</h2>
+</div>
+<div class="col-md-12">
+    <form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+        <div class="col-md-9">
+            <table>
+                {{form.as_table}}
+                <tr>
+                    <th>Add Attachments:</th>
+                    <td><input type="file" name="files" multiple/></td>
+                </tr>
+            </table>
+        </div>
+         <div class="col-md-3">   
+            <div class="col-md-12">
+                {% if task %}            
+                <button type="submit" class="btn btn-primary btn-md btn-block">Save</button>
+                {% else %}
+                <button type="submit" class="btn btn-primary btn-md btn-block">Create</button>
+                {% endif %}
+            </div>
+    </form>
+            <div class="col-md-12" style="padding-top:10px">
+                <form action="" method="post">{% csrf_token %}
+                    <input type="hidden" name="control" value="cancel"/>
+                    <button type="submit" class="btn btn-md btn-block btn-warning">Cancel</button>
+                </form>
+            </div>
+            <div class="col-md-12" style="padding-top:10px">
+                {% if task %}
+                <form action="" method="post">{% csrf_token %}
+                    <input type="hidden" name="control" value="delete"/>
+                    <button type="submit" class="btn btn-md btn-block btn-danger">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>     
+</div>
+{% if files %}
+<div class="col-md-12" style="padding-top:15px">
+    <div class="col-md-12">
+        <table>
+            <tr>
+                <th>Current Attachments:</th>
+                <td></td>
+            </tr>
+            {% for file in files %}
+            <tr>
+                <th></th>
+                <td>                    
+                    <form class="form-inline" action="" method="post">{% csrf_token %}                       
+                        <div class="form-group">                      
+                            <div class="input-group">
+                                <div class="input-group-addon">{{file.f}}</div>
+                                <input type="hidden" name="control" value="delete_file_{{file.id}}"/>
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-md btn-danger btn-block"><strong>X</strong></button>
+                                </div>
+                            </div>
+                        </div>                               
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
 
 {% endblock body %}
