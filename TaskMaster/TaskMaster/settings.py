@@ -94,7 +94,7 @@ STATICFILES_DIRS = (
 # Media Files (Those uploaded by users into the application)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT='/var/www/taskmaster/media/'
+MEDIA_ROOT= os.path.join(BASE_DIR, 'media/')
 
 # User Registration Settings
 

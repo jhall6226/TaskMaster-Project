@@ -35,7 +35,7 @@ def register_view(request):
             u = form.save()
             u.slug = slugify(u.get_full_name())
             u.save()
-            r = Resource(user=u)
+            r = Resource(user=u,slug=slugify(u.username))
             r.save()
             
             messages.add_message(request, messages.INFO, 'User added!')

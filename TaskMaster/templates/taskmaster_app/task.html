@@ -3,25 +3,67 @@
 {% block body %}
 
 <div class="jumbotron">
-    <h1 align="center">{{task.project.title}}: {{task.title}}</h1>
+    <h2 align="center">{{task.project.title}}: {{task.title}}</h2>
 </div>
 
-<div class="col-md-12">
-    <a href="{% url 'taskmaster_app:add_task' project=project.slug %}?id={{task.id}}" class="btn btn-sm btn-primary">Edit</a>
+<div class="row">
+    <div class="col-xs-2"><a href="{% url 'taskmaster_app:project_view' project=project.slug %}?id={{project.id}}"><button class="btn btn-sm btn-primary">Back to Project</button></a></div>
+    <div class="col-xs-8"></div>
+    <div class="col-xs-2"><div align="right"><a href="{% url 'taskmaster_app:add_task' project=project.slug %}?id={{task.id}}"><button class="btn btn-sm btn-primary">Edit Task</button></a></div></div>
+</div>
+<div class="row" style="padding-bottom:40px">
+    <div class="container-fluid" style="padding:0px">
+        <div class="col-xs-12"><h4 class="page-header">Instructions</h4></div>
+        <div class="col-xs-12">{{task.task_instructions}}</div>
+    </div>
 </div>
 
-<div class="col-md-12">
-    <h3 class="page-header">Resources</h3>
-    {% if resources %}
-        {% for resource in resources %}
-            <h4><a href="{% url 'taskmaster_app:resource_view' resource=resource.slug %}?id={{resource.id}}">{{resource}}</a></h4>
-        {% endfor %}
-    {% else %}
-        <div class="alert alert-warning" align="center">
-            <h4>This Task doesn't have any Resources assigned to it yet.</h4>
+<div class="row">
+    <div class="panel panel-default">
+        <!--Attachment Panel Heading-->
+        <div class="panel-heading">
+            <h4 class="panel-title">Attachments</h4>
         </div>
-    {% endif %}
+        <!--If there are existing attachments, display in a table; else, display alert-->
+        {% if files %}
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>File Name</th>
+                <th>Document Type</th>
+                <th>Last Saved</th>
+            </tr>
+            {% for file in files %}
+            <tr>
+                <td></td>           <!--Figure out how to add icons based on file type-->
+                <td>{{file.get_file_name}}</td>
+                <td>{{file.get_doc_type}}</td>
+                <td></td>            
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="panel-body">
+            <div class="alert alert-warning" align="center">
+                <h5>This Project doesn't have any Attachments associated with it.</h5>
+            </div>
+        </div>
+        {% endif %}
+    </div>   
 </div>
-
+<div class="row">
+    <div class="col-xs-12">
+        <h4 class="page-header">Assigned Resources</h4>
+        {% if resources %}
+            {% for resource in resources %}
+                <h5 class="section-header"><a href="{% url 'taskmaster_app:resource_view' resource=resource.slug %}?id={{resource.id}}">{{resource.user.first_name}} {{resource.user.last_name}}</a></h5>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning" align="center">
+                <h4>This Project doesn't have any Resources assigned to it yet.</h4>
+            </div>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock body %}
